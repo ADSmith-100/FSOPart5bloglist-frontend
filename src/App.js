@@ -13,6 +13,10 @@ const Notification = ({ message }) => {
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
+  const [newBlog, setNewBlog] = useState([]);
+  const [newBlogTitle, setNewBlogTitle] = useState("");
+  const [newBlogAuthor, setNewBlogAuthor] = useState("");
+  const [newBlogUrl, setNewBlogUrl] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -85,6 +89,45 @@ const App = () => {
     }
   };
 
+  const addBlog = (event) => {
+    event.preventDefault();
+    const blogObject = {
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl,
+    };
+
+    blogService.create(blogObject).then((returnedBlog) => {
+      setBlogs(blogs.concat(returnedBlog));
+      setNewBlog("");
+    });
+  };
+
+  const handleBlogAuthorChange = () => {};
+
+  const handleBlogTitleChange = () => {};
+
+  const handleBlogUrlChange = () => {};
+
+  const blogForm = () => (
+    <form onSubmit={addBlog}>
+      <h2>New Note</h2>
+      <p>
+        title:
+        <input value={newBlogTitle} onChange={handleBlogTitleChange} />
+      </p>
+      <p>
+        author:
+        <input value={newBlogAuthor} onChange={handleBlogAuthorChange} />
+      </p>
+      <p>
+        url:
+        <input value={newBlogUrl} onChange={handleBlogUrlChange} />
+      </p>
+      <button type="submit">save</button>
+    </form>
+  );
+
   return (
     <div>
       <h2>blogs</h2>
@@ -97,6 +140,7 @@ const App = () => {
         <div>
           <p>
             {user.name} logged-in <button onClick={handleLogout}>logout</button>
+            {blogForm()}
           </p>
           <ul>
             {blogs.map((blog) => (
