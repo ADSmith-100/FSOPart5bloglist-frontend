@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import NotificationER from "./components/NotificationER";
 import NotificationOK from "./components/NotificationOK";
 import "./App.css";
+import Togglable from "./components/Togglable";
+import BlogForm from "./components/BlogForm";
 
 // const Notification = ({ message }) => {
 //   if (message === null) {
@@ -17,9 +19,7 @@ import "./App.css";
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   // const [newBlog, setNewBlog] = useState([]);
-  const [newBlogTitle, setNewBlogTitle] = useState("");
-  const [newBlogAuthor, setNewBlogAuthor] = useState("");
-  const [newBlogUrl, setNewBlogUrl] = useState("");
+
   const [errorMessage, setErrorMessage] = useState(null);
   const [comfirmMessage, setComfirmMessage] = useState(null);
   const [username, setUsername] = useState("");
@@ -93,22 +93,15 @@ const App = () => {
     }
   };
 
-  const addBlog = (event) => {
-    event.preventDefault();
+  const blogFormRef = useRef();
 
-    const blogObject = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl,
-    };
+  const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility();
 
     blogService
       .create(blogObject)
       .then((returnedBlog) => {
         setBlogs(blogs.concat(returnedBlog));
-        setNewBlogTitle("");
-        setNewBlogUrl("");
-        setNewBlogAuthor("");
 
         setComfirmMessage(
           `a new blog ${blogObject.title} by ${blogObject.author} was added : )`
@@ -125,29 +118,23 @@ const App = () => {
       });
   };
 
-  const handleBlogAuthorChange = (e) => {
-    setNewBlogAuthor(e.target.value);
-  };
-  const handleBlogTitleChange = (e) => {
-    setNewBlogTitle(e.target.value);
-  };
-
-  const handleBlogUrlChange = (e) => {
-    setNewBlogUrl(e.target.value);
-  };
-
   const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <h2>New Blog</h2>
-      title:
-      <input value={newBlogTitle} onChange={handleBlogTitleChange} />
-      author:
-      <input value={newBlogAuthor} onChange={handleBlogAuthorChange} />
-      url:
-      <input value={newBlogUrl} onChange={handleBlogUrlChange} />
-      <button type="submit">create</button>
-    </form>
+    <Togglable buttonLabel="new blog" ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} />
+    </Togglable>
   );
+
+  //   <form onSubmit={addBlog}>
+  //     <h2>New Blog</h2>
+  //     title:
+  //     <input value={newBlogTitle} onChange={handleBlogTitleChange} />
+  //     author:
+  //     <input value={newBlogAuthor} onChange={handleBlogAuthorChange} />
+  //     url:
+  //     <input value={newBlogUrl} onChange={handleBlogUrlChange} />
+  //     <button type="submit">create</button>
+  //   </form>
+  // );
 
   return (
     <div>
