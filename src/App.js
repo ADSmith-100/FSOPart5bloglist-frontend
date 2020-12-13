@@ -27,7 +27,17 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      //make a copy of blogs array to avoid mutating issues
+      let blogsByLikes = [...blogs];
+      blogsByLikes.sort(
+        (a, b) => (a.likes < b.likes ? 1 : b.likes < a.likes ? -1 : 0)
+        //could also use return a.likes.localeCompare(b.likes)I think
+      );
+
+      console.log(blogsByLikes);
+      setBlogs(blogsByLikes);
+    });
   }, []);
 
   useEffect(() => {
@@ -47,8 +57,9 @@ const App = () => {
     };
 
     blogService.update(id, changedBlog).then((returnedBlog) => {
-      console.log(typeof returnedBlog);
       // let jsonBlog = JSON.parse(returnedBlog);
+      // nope server responds with object this throws error
+      //returnedBlog from server was not in a format that the front end totally could use.  The User object was missing - only had id.
       setBlogs(blogs.map((blog) => (blog.id !== id ? blog : changedBlog)));
     });
   };
