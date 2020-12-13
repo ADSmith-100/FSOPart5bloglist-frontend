@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Blog = ({ blog, username }) => {
+const Blog = ({ blog, addLikes, username }) => {
   const [extraDataVisible, setExtraDataVisible] = useState(false);
   const blogStyle = {
     paddingTop: 10,
@@ -16,8 +16,14 @@ const Blog = ({ blog, username }) => {
   };
 
   const handleHideData = (e) => {
-    e.preventDefault();
+    e.preventDefault(e);
     setExtraDataVisible(false);
+  };
+
+  const handleAddLike = (e) => {
+    addLikes({
+      likes: blog.likes + 1,
+    });
   };
 
   return (
@@ -33,10 +39,13 @@ const Blog = ({ blog, username }) => {
           </p>
           <p>{blog.author}</p>
           <p>{blog.url}</p>
+          <p>user: {blog.user.name}</p>
           <p>
-            likes: {blog.likes} <button>like</button>{" "}
+            likes: {blog.likes}{" "}
+            <button onClick={() => handleAddLike(blog.id, blog.user.name)}>
+              like
+            </button>{" "}
           </p>
-          <p>user: {blog.user.username}</p>
         </div>
       )}
     </div>
