@@ -45,9 +45,31 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
+      console.log(user);
       blogService.setToken(user.token);
     }
   }, []);
+
+  const removeBlog = (id, name) => {
+    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
+      blogService
+
+        .remove(id)
+        .then(() => {
+          const newBlogs = blogs.filter((b) => b.id !== id);
+          setBlogs(newBlogs);
+        })
+        .catch((error) => {
+          setErrorMessage(`'${name}' was already removed from server`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+          setBlogs(blogs.filter((p) => p.id !== id));
+        });
+    } else {
+      alert("operation cancelled");
+    }
+  };
 
   const addLikesTo = (id) => {
     const blog = blogs.find((b) => b.id === id);
@@ -186,6 +208,8 @@ const App = () => {
                 blog={blog}
                 username={user.name}
                 addLikes={() => addLikesTo(blog.id)}
+                removeBlog={() => removeBlog(blog.id, blog.title)}
+                user={user.name}
               />
             ))}
           </ul>
@@ -196,5 +220,3 @@ const App = () => {
 };
 
 export default App;
-
-//\\////

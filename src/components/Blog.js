@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Blog = ({ blog, addLikes, username }) => {
+const Blog = ({ blog, addLikes, removeBlog, user }) => {
   const [extraDataVisible, setExtraDataVisible] = useState(false);
   const blogStyle = {
     paddingTop: 10,
@@ -26,6 +26,10 @@ const Blog = ({ blog, addLikes, username }) => {
     });
   };
 
+  const handleRemoveBlog = (id, name) => {
+    removeBlog(id, name);
+  };
+
   return (
     <div>
       {extraDataVisible === false ? (
@@ -44,6 +48,14 @@ const Blog = ({ blog, addLikes, username }) => {
             likes: {blog.likes}{" "}
             <button onClick={() => handleAddLike(blog.id)}>like</button>{" "}
           </p>
+
+          {blog.user.name === user ? (
+            <button onClick={() => handleRemoveBlog(blog.id, blog.title)}>
+              remove
+            </button>
+          ) : (
+            <></>
+          )}
         </div>
       )}
     </div>
