@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 const Blog = ({ blog, addLikes, removeBlog, user }) => {
   const [extraDataVisible, setExtraDataVisible] = useState(false);
@@ -32,7 +31,7 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
   };
 
   return (
-    <div>
+    <div className='blog'>
       {extraDataVisible === false ? (
         <div style={blogStyle}>
           {blog.title} {blog.author} <button onClick={handleView}>view</button>
@@ -63,8 +62,5 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
   );
 };
 
-Blog.propTypes = {
-  user: PropTypes.string.isRequired,
-};
 
 export default Blog;
