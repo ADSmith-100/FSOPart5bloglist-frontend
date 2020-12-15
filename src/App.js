@@ -144,11 +144,12 @@ const App = () => {
 
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility();
-
+    const correctBlogForm = { ...blogObject, user: { name: user.name } };
+    console.log(typeof blogFormRef);
     blogService
       .create(blogObject)
-      .then((returnedBlog) => {
-        setBlogs(blogs.concat(returnedBlog));
+      .then((blogObject) => {
+        setBlogs(blogs.concat(blogObject));
 
         setComfirmMessage(
           `a new blog ${blogObject.title} by ${blogObject.author} was added : )`
@@ -167,7 +168,7 @@ const App = () => {
 
   const blogForm = () => (
     <Togglable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm createBlog={addBlog} />
+      <BlogForm createBlog={addBlog} user={user.name} />
     </Togglable>
   );
 
@@ -202,9 +203,9 @@ const App = () => {
           {user.name} logged-in <button onClick={handleLogout}>logout</button>
           {blogForm()}
           <ul>
-            {blogs.map((blog) => (
+            {blogs.map((blog, i) => (
               <Blog
-                key={blog.id}
+                key={i}
                 blog={blog}
                 username={user.name}
                 addLikes={() => addLikesTo(blog.id)}

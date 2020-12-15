@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, addLikes, removeBlog, user }) => {
   const [extraDataVisible, setExtraDataVisible] = useState(false);
@@ -60,6 +61,10 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
       )}
     </div>
   );
+};
+
+Blog.propTypes = {
+  user: PropTypes.string.isRequired,
 };
 
 export default Blog;
