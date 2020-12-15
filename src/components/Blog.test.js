@@ -59,4 +59,30 @@ const div2 = component.container.querySelector('.blog')
     )
   })
 
+  test('clicking the like button twice calls event handler twice', () => {
+  const blog = {
+    title: 'Component testing is done with react-testing-library',
+    author: 'Test Author',
+    url: "www.test.com",
+    likes: 12,
+    user: "testUser"
+  }
+
+  const mockHandler = jest.fn()
+
+  const component = render(
+    <Blog blog={blog} handleAddLike={mockHandler} addLikes={mockHandler}/>
+  )
+
+  const button = component.getByText('view')
+    fireEvent.click(button)
+
+  const button2 = component.getByText('like')
+  fireEvent.click(button2)
+  fireEvent.click(button2)
+  
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
+
 
