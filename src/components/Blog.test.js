@@ -53,7 +53,7 @@ const div2 = component.container.querySelector('.blog')
     expect(div).toHaveTextContent(
     'www.test.com'
   )
-         const div2 = component.container.querySelector('.blog')
+    const div2 = component.container.querySelector('.blog')
     expect(div2).toHaveTextContent(
     'likes'
     )
