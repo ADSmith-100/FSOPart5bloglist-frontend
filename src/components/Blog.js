@@ -34,7 +34,7 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
     <div className='blog'>
       {extraDataVisible === false ? (
         <div style={blogStyle}>
-          {blog.title} {blog.author} <button onClick={handleView}>view</button>
+          {blog.title} {blog.author} <button id='view' onClick={handleView}>view</button>
         </div>
       ) : (
         <div style={blogStyle}>
@@ -46,7 +46,7 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
           <p>user: {blog.user.name}</p>
           <p>
             likes: {blog.likes}{" "}
-            <button onClick={() => handleAddLike(blog.id)}>like</button>{" "}
+            <button id='like' onClick={() => handleAddLike(blog.id)}>like</button>{" "}
           </p>
 
           {blog.user.name === user ? (

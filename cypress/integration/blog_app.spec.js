@@ -42,15 +42,21 @@ describe('Login', function() {
     beforeEach(function() {
       cy.login({ username: 'ttester', password: 'hurrdurr' })      })
 
-    it('A blog can be created', function() {
+    it('A blog can be created and liked', function() {
       cy.get('#new-blog').click()     
       cy.get('#title').type('Test Blog Title by Cyprus')
       cy.get('#author').type('Test Blog Author by Cyprus')
       cy.get('#url').type('Test Blog url by Cyprus')
       cy.contains('create').click()
       cy.contains('Test Blog Title by Cyprus')
-
-      })
+      cy.get('#view').click()
+      cy.get('#like').click()
+      cy.get('html').should('contain', 'likes: 1')
     })
+      
+    
+   
   })
 })
+})
+
