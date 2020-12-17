@@ -17,7 +17,7 @@ describe('Blog app', function() {
 })
 
 
-describe.only('Login', function() {
+describe('Login', function() {
     it('succeeds with correct credentials', function() {
       cy.get('#username').type('ttester')
       cy.get('#password').type('hurrdurr')
@@ -30,13 +30,27 @@ describe.only('Login', function() {
       cy.get('#password').type('wrong')
       cy.get('#login-button').click()    
 
-       cy.get('.error')
+      cy.get('.error')
       .should('contain', 'Wrong credentials')
       .and('have.css', 'color', 'rgb(136, 1, 1)')
       .and('have.css', 'border-style', 'solid')
     
-        cy.get('html').should('not.contain', 'Testguy McTesterson logged-in')
+      cy.get('html').should('not.contain', 'Testguy McTesterson logged-in')
+    })
+  
+  describe.only('When logged in', function() {
+    beforeEach(function() {
+      cy.login({ username: 'ttester', password: 'hurrdurr' })      })
+
+    it('A blog can be created', function() {
+      cy.get('#new-blog').click()     
+      cy.get('#title').type('Test Blog Title by Cyprus')
+      cy.get('#author').type('Test Blog Author by Cyprus')
+      cy.get('#url').type('Test Blog url by Cyprus')
+      cy.contains('create').click()
+      cy.contains('Test Blog Title by Cyprus')
+
+      })
     })
   })
 })
-
