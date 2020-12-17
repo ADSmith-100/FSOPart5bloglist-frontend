@@ -15,11 +15,15 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "eslint": "eslint ."
   },
   "eslintConfig": {
-    "extends": "react-app"
-  },
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+    },
   "browserslist": {
     "production": [
       ">0.2%",
