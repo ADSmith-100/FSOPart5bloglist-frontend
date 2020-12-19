@@ -24,6 +24,7 @@ const create = async (newObject) => {
 const update = (id, newObject) => {
   // eslint-disable-next-line no-useless-escape
   const request = axios.put(`${baseUrl}\/${id}`, newObject);
+  
   return request.then((response) => response.data);
 };
 

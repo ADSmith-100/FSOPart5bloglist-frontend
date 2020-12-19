@@ -43,7 +43,8 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
           </p>
           <p>{blog.author}</p>
           <p>{blog.url}</p>
-          <p>user: {blog.user.name}</p>
+          {blog.user.name === undefined ? (<p>waiting...</p>): (<p>user: {blog.user.name}</p>)}
+          
           <p>
             likes: {blog.likes}{" "}
             <button id='like' onClick={() => handleAddLike(blog.id)}>like</button>{" "}

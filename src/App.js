@@ -147,7 +147,7 @@ const App = () => {
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility();
     // const correctBlogForm = { ...blogObject, user: { name: user.name } };
-    // console.log(typeof blogFormRef);
+    console.log(JSON.stringify(blogObject));
     blogService
       .create(blogObject)
       .then((blogObject) => {

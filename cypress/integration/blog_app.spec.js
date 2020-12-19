@@ -42,7 +42,7 @@ describe('Login', function() {
     beforeEach(function() {
       cy.login({ username: 'ttester', password: 'hurrdurr' })      })
 
-    it('A blog can be created and liked', function() {
+    it('A blog can be created, liked, and deleted', function() {
       cy.get('#new-blog').click()     
       cy.get('#title').type('Test Blog Title by Cyprus')
       cy.get('#author').type('Test Blog Author by Cyprus')
@@ -52,11 +52,10 @@ describe('Login', function() {
       cy.get('#view').click()
       cy.get('#like').click()
       cy.get('html').should('contain', 'likes: 1')
+      cy.get()
+      })
     })
-      
-    
-   
+  
   })
-})
 })
 
