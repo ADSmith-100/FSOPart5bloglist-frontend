@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import blogService from "../services/blogs";
 
-const Blog = ({ blog, addLikes, removeBlog, user }) => {
+
+const Blog = ({ blog, addLikes, removeBlog, user, setBlogs }) => {
   const [extraDataVisible, setExtraDataVisible] = useState(false);
   const blogStyle = {
     paddingTop: 10,
@@ -18,6 +20,17 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
   const handleHideData = (e) => {
     e.preventDefault(e);
     setExtraDataVisible(false);
+    blogService.getAll().then((blogs) => {
+      //make a copy of blogs array to avoid mutating issues
+      let blogsByLikes = [...blogs];
+      blogsByLikes.sort(
+        (a, b) => (a.likes < b.likes ? 1 : b.likes < a.likes ? -1 : 0)
+        //could also use return a.likes.localeCompare(b.likes)I think
+      );
+
+      console.log(blogsByLikes);
+      setBlogs(blogsByLikes);
+    });
   };
 
   const handleAddLike = (e) => {
@@ -39,7 +52,7 @@ const Blog = ({ blog, addLikes, removeBlog, user }) => {
       ) : (
         <div style={blogStyle}>
           <p>
-            {blog.title} <button onClick={handleHideData}>hide</button>
+            {blog.title} <button id='hide' onClick={handleHideData}>hide</button>
           </p>
           <p>{blog.author}</p>
           <p>{blog.url}</p>

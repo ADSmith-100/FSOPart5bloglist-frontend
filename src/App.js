@@ -83,6 +83,7 @@ const App = () => {
       // nope server responds with object this throws error
       //returnedBlog from server was not in a format that the front end totally could use.  The User object was missing - only had id.
       setBlogs(blogs.map((blog) => (blog.id !== id ? blog : changedBlog)));
+      
     });
   };
 
@@ -156,10 +157,22 @@ const App = () => {
         setComfirmMessage(
           `a new blog ${blogObject.title} by ${blogObject.author} was added : )`
         );
-        setTimeout(() => {
+                setTimeout(() => {
           setComfirmMessage(null);
         }, 5000);
+     blogService.getAll().then((blogs) => {
+      //make a copy of blogs array to avoid mutating issues
+      let blogsByLikes = [...blogs];
+      blogsByLikes.sort(
+        (a, b) => (a.likes < b.likes ? 1 : b.likes < a.likes ? -1 : 0)
+        //could also use return a.likes.localeCompare(b.likes)I think
+      );
+
+      console.log(blogsByLikes);
+      setBlogs(blogsByLikes);
+    });
       })
+
       .catch((error) => {
         setErrorMessage(error.response.data.error);
         setTimeout(() => {
@@ -202,7 +215,7 @@ const App = () => {
         loginForm()
       ) : (
         <div>
-          {user.name} logged-in <button onClick={handleLogout}>logout</button>
+          {user.name} logged-in <button id='logout' onClick={handleLogout}>logout</button>
           {blogForm()}
           <ul>
             {blogs.map((blog, i) => (
@@ -213,6 +226,7 @@ const App = () => {
                 addLikes={() => addLikesTo(blog.id)}
                 removeBlog={() => removeBlog(blog.id, blog.title)}
                 user={user.name}
+                setBlogs={setBlogs}
               />
             ))}
           </ul>
@@ -223,4 +237,3 @@ const App = () => {
 };
 
 export default App;
-//
