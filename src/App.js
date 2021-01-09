@@ -83,7 +83,6 @@ const App = () => {
       // nope server responds with object this throws error
       //returnedBlog from server was not in a format that the front end totally could use.  The User object was missing - only had id.
       setBlogs(blogs.map((blog) => (blog.id !== id ? blog : changedBlog)));
-      
     });
   };
 
@@ -109,7 +108,9 @@ const App = () => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button id='login-button' type="submit">login</button>
+      <button id="login-button" type="submit">
+        login
+      </button>
     </form>
   );
 
@@ -157,20 +158,20 @@ const App = () => {
         setComfirmMessage(
           `a new blog ${blogObject.title} by ${blogObject.author} was added : )`
         );
-                setTimeout(() => {
+        setTimeout(() => {
           setComfirmMessage(null);
         }, 5000);
-     blogService.getAll().then((blogs) => {
-      //make a copy of blogs array to avoid mutating issues
-      let blogsByLikes = [...blogs];
-      blogsByLikes.sort(
-        (a, b) => (a.likes < b.likes ? 1 : b.likes < a.likes ? -1 : 0)
-        //could also use return a.likes.localeCompare(b.likes)I think
-      );
+        blogService.getAll().then((blogs) => {
+          //make a copy of blogs array to avoid mutating issues
+          let blogsByLikes = [...blogs];
+          blogsByLikes.sort(
+            (a, b) => (a.likes < b.likes ? 1 : b.likes < a.likes ? -1 : 0)
+            //could also use return a.likes.localeCompare(b.likes)I think
+          );
 
-      console.log(blogsByLikes);
-      setBlogs(blogsByLikes);
-    });
+          console.log(blogsByLikes);
+          setBlogs(blogsByLikes);
+        });
       })
 
       .catch((error) => {
@@ -199,6 +200,12 @@ const App = () => {
   //   </form>
   // );
 
+  let blogsByLikes = [...blogs];
+  blogsByLikes.sort(
+    (a, b) => (a.likes < b.likes ? 1 : b.likes < a.likes ? -1 : 0)
+    //could also use return a.likes.localeCompare(b.likes)I think
+  );
+
   return (
     <div>
       <h2>blogs</h2>
@@ -215,10 +222,13 @@ const App = () => {
         loginForm()
       ) : (
         <div>
-          {user.name} logged-in <button id='logout' onClick={handleLogout}>logout</button>
+          {user.name} logged-in{" "}
+          <button id="logout" onClick={handleLogout}>
+            logout
+          </button>
           {blogForm()}
           <ul>
-            {blogs.map((blog, i) => (
+            {blogsByLikes.map((blog, i) => (
               <Blog
                 key={i}
                 blog={blog}
