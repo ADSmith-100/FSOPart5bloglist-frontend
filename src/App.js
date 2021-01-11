@@ -7,10 +7,15 @@ import NotificationOK from "./components/NotificationOK";
 import "./App.css";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
+import Notification from "./components/Notification";
+import setNotification from "./reducers/notificationReducer";
+import { useSelector, useDispatch } from "react-redux";
 
 const App = () => {
+  const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
   // const [newBlog, setNewBlog] = useState([]);
+  const [notification, setNotification] = useState(null);
 
   const [errorMessage, setErrorMessage] = useState(null);
   const [comfirmMessage, setComfirmMessage] = useState(null);
@@ -42,6 +47,16 @@ const App = () => {
     }
   }, []);
 
+  const notifyWith = (message, type = "success") => {
+    setNotification({
+      message,
+      type,
+    });
+    setTimeout(() => {
+      setNotification(null);
+    }, 5000);
+  };
+
   const removeBlog = (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
       blogService
@@ -52,10 +67,11 @@ const App = () => {
           setBlogs(newBlogs);
         })
         .catch((error) => {
-          setErrorMessage(`'${name}' was already removed from server`);
-          setTimeout(() => {
-            setErrorMessage(null);
-          }, 5000);
+          notifyWith(`'${name}' was already removed from server`, error);
+          // setErrorMessage(`'${name}' was already removed from server`);
+          // setTimeout(() => {
+          //   setErrorMessage(null);
+          // }, 5000);
           setBlogs(blogs.filter((p) => p.id !== id));
         });
     } else {
@@ -129,10 +145,11 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setErrorMessage("Wrong credentials");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      notifyWith("Wrong credentials", exception);
+      // setErrorMessage("Wrong credentials");
+      // setTimeout(() => {
+      //   setErrorMessage(null);
+      // }, 5000);
     }
   };
 
@@ -147,12 +164,10 @@ const App = () => {
       .then((blogObject) => {
         setBlogs(blogs.concat(blogObject));
 
-        setComfirmMessage(
+        notifyWith(
           `a new blog ${blogObject.title} by ${blogObject.author} was added : )`
         );
-        setTimeout(() => {
-          setComfirmMessage(null);
-        }, 5000);
+
         blogService.getAll().then((blogs) => {
           //make a copy of blogs array to avoid mutating issues
           let blogsByLikes = [...blogs];
@@ -167,10 +182,11 @@ const App = () => {
       })
 
       .catch((error) => {
-        setErrorMessage(error.response.data.error);
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
+        notifyWith(error.response.data.error, error);
+        // setErrorMessage(error.response.data.error);
+        // setTimeout(() => {
+        //   setErrorMessage(null);
+        // }, 5000);
       });
   };
 
@@ -203,11 +219,12 @@ const App = () => {
       <h2>blogs</h2>
 
       <br></br>
-      {errorMessage !== null ? (
+      <Notification notification={notification} />
+      {/* {errorMessage !== null ? (
         <NotificationER message={errorMessage} />
       ) : (
         <NotificationOK message={comfirmMessage} />
-      )}
+      )} */}
       <br></br>
 
       {user === null ? (

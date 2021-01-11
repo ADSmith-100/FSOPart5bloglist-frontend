@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { vote4 } from "../reducers/anecdoteReducer";
 import { setNotification } from "../reducers/notificationReducer";
 
 //presentational component - not aware that event handler dispatches action
@@ -34,7 +33,7 @@ const BlogList = (props) => {
 
   return (
     <>
-      {blogssByVotes.map((blog) => (
+      {blogsByVotes.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
