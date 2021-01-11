@@ -2,40 +2,29 @@ import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import NotificationER from "./components/NotificationER";
-import NotificationOK from "./components/NotificationOK";
 import "./App.css";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import Notification from "./components/Notification";
-import setNotification from "./reducers/notificationReducer";
+// import setNotification from "./reducers/notificationReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
 import { useSelector, useDispatch } from "react-redux";
+import BlogList from "./components/BlogList";
 
 const App = () => {
   const dispatch = useDispatch();
+
   const [blogs, setBlogs] = useState([]);
   // const [newBlog, setNewBlog] = useState([]);
   const [notification, setNotification] = useState(null);
 
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [comfirmMessage, setComfirmMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      //make a copy of blogs array to avoid mutating issues
-      let blogsByLikes = [...blogs];
-      blogsByLikes.sort(
-        (a, b) => (a.likes < b.likes ? 1 : b.likes < a.likes ? -1 : 0)
-        //could also use return a.likes.localeCompare(b.likes)I think
-      );
-
-      console.log(blogsByLikes);
-      setBlogs(blogsByLikes);
-    });
-  }, []);
+    blogService.getAll().then((blogs) => dispatch(initializeBlogs(blogs)));
+  }, [dispatch]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -131,17 +120,17 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     console.log("logging in with", username, password);
-
     try {
       const user = await loginService.login({
         username,
         password,
       });
-
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
 
       blogService.setToken(user.token);
+
       setUser(user);
+
       setUsername("");
       setPassword("");
     } catch (exception) {
@@ -164,9 +153,9 @@ const App = () => {
       .then((blogObject) => {
         setBlogs(blogs.concat(blogObject));
 
-        notifyWith(
-          `a new blog ${blogObject.title} by ${blogObject.author} was added : )`
-        );
+        // notifyWith(
+        //   `a new blog ${blogObject.title} by ${blogObject.author} was added : )`
+        // );
 
         blogService.getAll().then((blogs) => {
           //make a copy of blogs array to avoid mutating issues
@@ -236,7 +225,8 @@ const App = () => {
             logout
           </button>
           {blogForm()}
-          <ul>
+          <BlogList />
+          {/* <ul>
             {blogsByLikes.map((blog, i) => (
               <Blog
                 key={i}
@@ -248,7 +238,7 @@ const App = () => {
                 setBlogs={setBlogs}
               />
             ))}
-          </ul>
+          </ul> */}
         </div>
       )}
     </div>

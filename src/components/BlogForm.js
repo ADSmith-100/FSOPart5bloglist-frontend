@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 
 const BlogForm = ({ createBlog, user }) => {
+  const dispatch = useDispatch();
+
   const [newBlogTitle, setNewBlogTitle] = useState("");
   const [newBlogAuthor, setNewBlogAuthor] = useState("");
   const [newBlogUrl, setNewBlogUrl] = useState("");
@@ -26,16 +30,29 @@ const BlogForm = ({ createBlog, user }) => {
     setNewBlogTitle("");
     setNewBlogUrl("");
     setNewBlogAuthor("");
+    dispatch(
+      setNotification(`you created '${newBlogTitle}' by ${newBlogAuthor}`, 10)
+    );
   };
 
   return (
     <div className="formDiv">
       <form onSubmit={addBlog}>
         <h2>Create a new blog</h2>
-        title: <input value={newBlogTitle} onChange={handleBlogTitleChange} id='title'/>
+        title:{" "}
+        <input
+          value={newBlogTitle}
+          onChange={handleBlogTitleChange}
+          id="title"
+        />
         author:{" "}
-        <input id='author' value={newBlogAuthor} onChange={handleBlogAuthorChange} />
-        url: <input id='url' value={newBlogUrl} onChange={handleBlogUrlChange} />
+        <input
+          id="author"
+          value={newBlogAuthor}
+          onChange={handleBlogAuthorChange}
+        />
+        url:{" "}
+        <input id="url" value={newBlogUrl} onChange={handleBlogUrlChange} />
         <button type="submit">create</button>
       </form>
     </div>

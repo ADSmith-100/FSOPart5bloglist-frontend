@@ -1,19 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
-
-//presentational component - not aware that event handler dispatches action
-const Blog = ({ blog, handleClick }) => {
-  return (
-    <>
-      <div>{blog.content}</div>
-      <div>
-        has {blog.votes}
-        <button onClick={handleClick}>vote</button>
-      </div>
-    </>
-  );
-};
+import Blog from "./Blog";
 
 //container component - contains app logic.  coordinates presentational component anecdotes
 const BlogList = (props) => {
@@ -39,7 +27,7 @@ const BlogList = (props) => {
           blog={blog}
           handleClick={() => {
             // dispatch(vote4(anecdote));
-            // dispatch(setNotification(`you voted '${anecdote.content}'`, 10));
+            dispatch(setNotification(`you voted '${blog.content}'`, 10));
             // dispatch(notifyVote(anecdote.content));
             // setTimeout(() => {
             //   dispatch(notifyRemove());
