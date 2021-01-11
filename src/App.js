@@ -8,14 +8,6 @@ import "./App.css";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 
-// const Notification = ({ message }) => {
-//   if (message === null) {
-//     return null;
-//   }
-
-//   return <div className="error">{message}</div>;
-// };
-
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   // const [newBlog, setNewBlog] = useState([]);
